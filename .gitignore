@@ -1,0 +1,21 @@
+
+node_modules/
+
+
+.env
+backend/.env
+*.local
+# dist fih version final build angular / 
+frontend/dist/
+frontend/.angular/
+
+
+*.log
+coverage/
+test-results/
+junit.xml
+
+
+.DS_Store
+Thumbs.db
+.vscode/
