@@ -1,4 +1,4 @@
-name: Release & Publish Docker Image
+name: Release & Auto-Deploy on Tag
 
 on:
   push:
@@ -10,8 +10,8 @@ permissions:
   packages: write
 
 jobs:
-  publish:
-    name: Build and Push to GHCR
+  publish-and-deploy:
+    name: Build, Push & Health Check
     runs-on: ubuntu-latest
 
     steps:
@@ -41,3 +41,12 @@ jobs:
           tags: |
             ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.tag }}
             ${{ steps.meta.outputs.image }}:latest
+
+      - name: Deploy tagged version and run health check
+        run: |
+          cp .env.example .env
+          APP_VERSION=${{ steps.meta.outputs.tag }} docker compose -f docker-compose.prod.yml up -d
+          sleep 5
+          chmod +x scripts/check_health.sh
+          ./scripts/check_health.sh http://localhost:3000/health
+          docker compose -f docker-compose.prod.yml down
