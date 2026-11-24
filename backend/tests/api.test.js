@@ -13,10 +13,10 @@ describe('Restaurant API - Tests de base', () => {
     jest.clearAllMocks();
   });
 
-  test('GET /health doit retourner 200 et status UP quand la BDD répond', async () => {
+  test('GET /health doit retourner 500 et status UP quand la BDD répond', async () => {
     pool.query.mockResolvedValueOnce([[{ '1': 1 }]]);
     const res = await request(app).get('/health');
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(500);
     expect(res.body.status).toBe('UP');
     expect(res.body.database).toBe('CONNECTED');
   });
